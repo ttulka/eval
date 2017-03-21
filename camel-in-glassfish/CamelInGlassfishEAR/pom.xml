@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>CamelInGlassfish</artifactId>
+        <groupId>cz.net21.ttulka.eval</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>CamelInGlassfish-EAR</artifactId>
+    <packaging>ear</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>cz.net21.ttulka.eval</groupId>
+            <artifactId>CamelInGlassfish-EJB</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.glassfish.main.ejb</groupId>
+                    <artifactId>javax.ejb</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>cz.net21.ttulka.eval</groupId>
+            <artifactId>CamelInGlassfish-Web</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.10.1</version>
+                <configuration>
+                    <fileNameMapping>no-version</fileNameMapping>
+                    <applicationName>CamelInGlassfish</applicationName>
+                    <displayName>CamelInGlassfish v. ${project.version}</displayName>
+                    <filtering>true</filtering>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <ejbModule>
+                            <groupId>cz.net21.ttulka.eval</groupId>
+                            <artifactId>CamelInGlassfish-EJB</artifactId>
+                        </ejbModule>
+                        <webModule>
+                            <groupId>cz.net21.ttulka.eval</groupId>
+                            <artifactId>CamelInGlassfish-Web</artifactId>
+                            <contextRoot>/camel</contextRoot>
+                        </webModule>
+                    </modules>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-ear</id>
+                    </execution>
+                    <execution>
+                        <id>default-ear-exploded</id>
+                        <goals>
+                            <goal>generate-application-xml</goal>
+                            <goal>ear</goal>
+                        </goals>
+                        <configuration>
+                            <unpackTypes>ejb,war</unpackTypes>
+                            <classifier>exploded</classifier>
+                            <workDirectory>${project.build.directory}/workDirectory-exploded</workDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
