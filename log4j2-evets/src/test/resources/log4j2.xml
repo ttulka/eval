@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="warn">
+
+    <properties>
+        <property name="logging.target.dir">.</property>
+        <property name="logging.statement.pattern">%d{DATE} %-5p %-20.20t %m | %l | %x | %t%n</property>
+    </properties>
+
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Routing"/>
+        </Root>
+    </Loggers>
+
+    <Appenders>
+        <Routing name="Routing">
+            <Script name="RoutingInit" language="JavaScript"><![CDATA[
+                java.lang.System.getProperty("externalProcess", "false").equalsIgnoreCase("true") ? "EXTERNAL" : "INTERNAL";
+            ]]></Script>
+            <Routes><!-- alternative to the script above, when the value is included direct in the variable: pattern="${sys:externalProcess:-INTERNAL}" -->
+                <Route ref="FileAppender" key="INTERNAL"/>
+                <Route ref="stderr" key="EXTERNAL"/>
+                <!--Route ref="socket" key="INTERNAL" /-->
+            </Routes>
+        </Routing>
+
+        <RollingFile name="FileAppender" fileName="${sys:logging.target.dir}/test.log" filePattern="${lsys:ogging.target.dir}/test-%i.log">
+            <ThresholdFilter level="all" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${logging.statement.pattern}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <Console name="stderr" target="SYSTEM_ERR">
+            <!--PatternLayout pattern="${logging.statement.pattern}"/-->
+            <JSONLayout properties="false" compact="true"/>
+        </Console>
+
+        <!--Socket name="socket" host="localhost" port="9500">
+            <JsonLayout properties="false" />
+        </Socket-->
+    </Appenders>
+
+</Configuration>
