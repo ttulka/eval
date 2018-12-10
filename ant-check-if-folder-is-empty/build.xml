@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Pull periodically until a given folder is empty or timeout is reached.
+-->
+<project name="Empty-Folder-Check" default="main">
+
+  <!-- mandatory: -->
+  <property name="folder" value="myfolder"/>
+  
+  <!-- optional: -->
+  <!--property name="folder.includes" value="**/*"/-->
+  <!--property name="folder.check.timeout.secs" value="30"/-->
+  <!--property name="folder.check.pull.ms" value="500"/-->
+    
+  <target name="main" depends="-periodic-check-if-folder-is-empty, folder-is-empty, folder-is-not-empty"/>
+  
+  <target name="folder-is-empty" if="-folder.empty">
+    <!-- TODO: custom code -->
+    <echo>Folder ${folder} is empty!</echo>
+  </target>
+  
+  <target name="folder-is-not-empty" unless="-folder.empty">
+    <!-- TODO: custom code -->
+    <echo>Folder ${folder} is NOT empty!</echo>
+  </target>
+  
+  <target name="-periodic-check-if-folder-is-empty">
+    <script language="javascript"><![CDATA[
+      var File = java.io.File;
+      var Thread = java.lang.Thread;
+      var System = java.lang.System;
+      
+      var folder = project.getProperty("folder");
+      
+      if (!folder) {
+        throw new Error("'folder' property must be set!");
+      }                                                         
+      
+      var includes = project.getProperty("folder.includes") || "**/*";
+      
+      var timeoutInMs = project.getProperty("folder.check.timeout.secs") * 1000 || 30000; // 30 secs as default
+      var pullPeriodInMs = project.getProperty("folder.check.pull.ms") * 1 || 500; // 500 millisecs as default
+      
+      var startTime = System.currentTimeMillis();
+      var folderEmpty = null;
+      
+      do {
+        if (folderEmpty !== null) {
+          Thread.sleep(pullPeriodInMs);
+        }
+        folderEmpty = checkFolderEmpty();
+        
+      } while (!folderEmpty && startTime + timeoutInMs > System.currentTimeMillis());
+      
+      if (folderEmpty) {
+        project.setProperty("-folder.empty", true)
+      }
+      
+      function checkFolderEmpty() {
+        var fs = project.createDataType("fileset");
+        fs.setDir(new File(folder));
+        fs.setIncludes(includes);
+        
+        var ds = fs.getDirectoryScanner(project);
+        var files = ds.getIncludedFiles();
+        
+        return files.length === 0;
+      }      
+    ]]></script>        
+  </target>
+  
+</project>
