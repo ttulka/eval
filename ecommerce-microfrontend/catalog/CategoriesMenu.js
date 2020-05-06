@@ -22,4 +22,4 @@ export default class Categories extends HTMLElement {
         `;
     }
 }
-customElements.define('catalog-categories', Categories);
+customElements.define('catalog-categories-menu', Categories);
