@@ -1,0 +1,10 @@
+[{
+    "productId": "TEST1",
+    "inStock": 123
+}, {
+    "productId": "TEST2",
+    "inStock": 1
+}, {
+    "productId": "TEST3",
+    "inStock": 0
+}]
