@@ -1,0 +1,16 @@
+[{
+    "productId": "TEST1",
+    "title": "Test 1",
+    "price": 1.5,
+    "quantity": 1
+},{
+    "productId": "TEST2",
+    "title": "Test 2",
+    "price": 2.5,
+    "quantity": 2
+},{
+    "productId": "TEST3",
+    "title": "Test 3",
+    "price": 3.5,
+    "quantity": 3
+}]
