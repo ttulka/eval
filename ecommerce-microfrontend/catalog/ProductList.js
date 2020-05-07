@@ -1,3 +1,5 @@
+import '../cart/BuyButton.js';
+
 export default class ProductList extends HTMLElement {
     constructor() {
         super();
@@ -34,15 +36,11 @@ export default class ProductList extends HTMLElement {
                     <td>${product.description}</td>
                     <td class="stock">${inStock[product.id] > 0 ? inStock[product.id] + ' left in stock' : 'sold out'}</td>
                     <td class="price">${formatter.format(product.price)}</td>
-                    <td>
-                        <form action="/cart" method="post">
-                            <input name="productId" value="${product.id}" type="hidden">
-                            <input name="title" value="${product.title}" type="hidden">
-                            <input name="price" value="${product.price}" type="hidden">
-                            <input name="quantity" value="1" type="hidden">
-    
-                            <button type="submit" name="">buy</button>
-                        </form>
+                    <td><cart-buy-button 
+                            productId="${product.id}" 
+                            title="${product.title}" 
+                            price="${product.price}">
+                        </cart-buy-button>
                     </td>
                 </tr>
             `).join('')}

@@ -14,7 +14,8 @@ a {
     background-color: olivedrab;
     color: white;
     font-weight: bold;
-    padding: 1em 2em;
+    padding: 0 2em;
+    height: 3em;
 }
 
 #content {
@@ -39,6 +40,10 @@ a {
     color: red;
 }
 
+catalog-categories-menu {
+    float: left;
+    padding: 1em;
+}
 .categories a {
     color: inherit;
     display: inline-block;
@@ -47,9 +52,14 @@ a {
 .categories a.home {
     text-decoration: none;
 }
-.categories a.cart {
-    text-decoration: none;
+
+cart-menu-link {
+    display: inline-block;
     float: right;
+    padding: 1em;
+}
+cart-menu-link a {
+    text-decoration: none;
 }
 
 .products .product th, .products .product td {

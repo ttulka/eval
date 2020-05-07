@@ -17,7 +17,6 @@ export default class Categories extends HTMLElement {
             ${categories.map(category => `
                 <a href="/category/${category.uri}">${category.title}</a>
             `).join('')}
-            <a href="/cart" class="cart">&#x1F6D2;</a>
         </nav>
         `;
     }
