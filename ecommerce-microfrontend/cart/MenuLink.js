@@ -3,14 +3,12 @@ export default class MenuLink extends HTMLElement {
         super();
     }
     connectedCallback() {
-        fetch('/data/catalog/categories.json')
-            .then(b => b.json())
-            .then(c => this.render(this.html(c)));
+        this.render(this.html());
     }
     render(html) {
         this.innerHTML = html;
     }
-    html(categories) {
+    html() {
         return `
         <a href="/cart" class="cart">&#x1F6D2;</a>
         `;
