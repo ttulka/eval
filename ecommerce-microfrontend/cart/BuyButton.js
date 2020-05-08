@@ -1,24 +1,31 @@
 customElements.define('cart-buy-button', class extends HTMLElement {
+    constructor() {
+        super();
+        this.addIntoCart = (productId, title, price, quantity) => 
+            console.log('Adding into cart', productId, title, price, quantity);
+    }
     connectedCallback() {
-        this.render(this.html(
+        this.render(this.html());
+        
+        this.button = this.querySelector('button');
+        this.buttonClick = e => this.addIntoCart(
             this.getAttribute('productId'),
             this.getAttribute('title'),
-            this.getAttribute('price')
-        ));
+            this.getAttribute('price'),
+            1
+        );
+        this.button.addEventListener('click', this.buttonClick);
+
+    }
+    disconnectedCallback() {
+        this.button.removeEventListener('click', this.buttonClick);
     }
     render(html) {
         this.innerHTML = html;
     }
-    html(id, title, price) {
+    html() {
         return `
-        <form action="/cart" method="post">
-            <input name="productId" value="${id}" type="hidden">
-            <input name="title" value="${title}" type="hidden">
-            <input name="price" value="${price}" type="hidden">
-            <input name="quantity" value="1" type="hidden">
-    
-            <button type="submit" name="">buy</button>
-        </form>
+        <button type="button">buy</button>
         `;
     }
 });
