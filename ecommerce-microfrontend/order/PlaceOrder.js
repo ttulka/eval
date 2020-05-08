@@ -1,9 +1,6 @@
 import '../delivery/DeliveryForm.js';
 
-export default class PlaceOrder extends HTMLElement {
-    constructor() {
-        super();
-    }
+customElements.define('order-place-order', class extends HTMLElement {
     connectedCallback() {
         this.render(this.html());
     }
@@ -15,11 +12,15 @@ export default class PlaceOrder extends HTMLElement {
         <h1>Place Order</h1>
 
         <div class="order">
+            <form action="/order" method="post" class="form">
 
-            <delivery-delivery-form></delivery-delivery-form>
+                <delivery-delivery-form></delivery-delivery-form>
 
+                <p>
+                    <button type="submit">Submit</button>
+                </p>
+            </form>
         </div>
         `;
     }
-}
-customElements.define('order-place-order', PlaceOrder);
+});

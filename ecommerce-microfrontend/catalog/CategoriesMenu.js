@@ -1,7 +1,4 @@
-export default class Categories extends HTMLElement {
-    constructor() {
-        super();
-    }
+customElements.define('catalog-categories-menu', class extends HTMLElement {
     connectedCallback() {
         fetch('/data/catalog/categories.json')
             .then(b => b.json())
@@ -20,5 +17,4 @@ export default class Categories extends HTMLElement {
         </nav>
         `;
     }
-}
-customElements.define('catalog-categories-menu', Categories);
+});

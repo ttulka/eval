@@ -1,7 +1,4 @@
-export default class MenuLink extends HTMLElement {
-    constructor() {
-        super();
-    }
+customElements.define('cart-menu-link', class extends HTMLElement {
     connectedCallback() {
         this.render(this.html());
     }
@@ -10,8 +7,7 @@ export default class MenuLink extends HTMLElement {
     }
     html() {
         return `
-        <a href="/cart" class="cart">&#x1F6D2;</a>
+        <a href="/cart.html" class="cart">&#x1F6D2;</a>
         `;
     }
-}
-customElements.define('cart-menu-link', MenuLink);
+});

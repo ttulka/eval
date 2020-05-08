@@ -1,7 +1,4 @@
-export default class BuyButton extends HTMLElement {
-    constructor() {
-        super();
-    }
+customElements.define('cart-buy-button', class extends HTMLElement {
     connectedCallback() {
         this.render(this.html(
             this.getAttribute('productId'),
@@ -14,7 +11,7 @@ export default class BuyButton extends HTMLElement {
     }
     html(id, title, price) {
         return `
-        <form action="/cart" method="post">
+        <form action="/cart.html" method="post">
             <input name="productId" value="${id}" type="hidden">
             <input name="title" value="${title}" type="hidden">
             <input name="price" value="${price}" type="hidden">
@@ -24,5 +21,4 @@ export default class BuyButton extends HTMLElement {
         </form>
         `;
     }
-}
-customElements.define('cart-buy-button', BuyButton);
+});

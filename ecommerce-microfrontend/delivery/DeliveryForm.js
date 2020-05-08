@@ -1,7 +1,4 @@
-export default class DeliveryForm extends HTMLElement {
-    constructor() {
-        super();
-    }
+customElements.define('delivery-delivery-form', class extends HTMLElement {
     connectedCallback() {
         this.render(this.html());
     }
@@ -20,13 +17,8 @@ export default class DeliveryForm extends HTMLElement {
                     <td>Address</td>
                     <td><input name="address" size="50"></td>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td><button type="submit">Submit</button></td>
-                </tr>
             </table>
         </form>
         `;
     }
-}
-customElements.define('delivery-delivery-form', DeliveryForm);
+});

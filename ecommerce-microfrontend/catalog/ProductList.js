@@ -1,9 +1,6 @@
 import '../cart/BuyButton.js';
 
-export default class ProductList extends HTMLElement {
-    constructor() {
-        super();
-    }
+customElements.define('catalog-product-list', class extends HTMLElement {
     connectedCallback() {
         const products = fetch('/data/catalog/products.json')
             .then(b => b.json());
@@ -47,5 +44,4 @@ export default class ProductList extends HTMLElement {
         </table>
         `;
     }
-}
-customElements.define('catalog-product-list', ProductList);
+});

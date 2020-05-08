@@ -1,7 +1,4 @@
-export default class ItemList extends HTMLElement {
-    constructor() {
-        super();
-    }
+customElements.define('cart-item-list', class extends HTMLElement {
     connectedCallback() {
         fetch('/data/cart/items.json')
             .then(b => b.json())
@@ -35,10 +32,9 @@ export default class ItemList extends HTMLElement {
             </table>
 
             <div class="order">
-                <a href="/order">Place Order</a>
+                <a href="/order.html">Place Order</a>
             </div>
         </div>
         `;
     }
-}
-customElements.define('cart-item-list', ItemList);
+});
