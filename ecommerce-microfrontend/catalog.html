@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DDD Example E-Commerce</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="layout.css" />
+</head>
+<body>
+    <header id="header">
+        <catalog-categories-menu></catalog-categories-menu>
+        <cart-menu-link></cart-menu-link>
+    </header>
+    
+    <section id="content">
+        <catalog-product-list></catalog-product-list>
+    </section>
+    
+    <footer id="footer">
+        DDD Example E-Commerce &copy; 2020
+    </footer>
+
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script src="/catalog/CategoriesMenu.js" type="module" async></script>
+    <script src="/cart/MenuLink.js" type="module" async></script>
+    <script src="/catalog/ProductList.js" type="module" async></script>
+</body>
+</html>

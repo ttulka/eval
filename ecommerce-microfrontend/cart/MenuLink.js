@@ -7,7 +7,7 @@ customElements.define('cart-menu-link', class extends HTMLElement {
     }
     html() {
         return `
-        <a href="/cart.html" class="cart">&#x1F6D2;</a>
+        <a href="/cart" class="cart">&#x1F6D2;</a>
         `;
     }
 });

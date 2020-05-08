@@ -32,7 +32,7 @@ customElements.define('cart-item-list', class extends HTMLElement {
             </table>
 
             <div class="order">
-                <a href="/order.html">Place Order</a>
+                <a href="/order">Place Order</a>
             </div>
         </div>
         `;

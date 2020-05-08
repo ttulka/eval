@@ -11,7 +11,7 @@ customElements.define('cart-buy-button', class extends HTMLElement {
     }
     html(id, title, price) {
         return `
-        <form action="/cart.html" method="post">
+        <form action="/cart" method="post">
             <input name="productId" value="${id}" type="hidden">
             <input name="title" value="${title}" type="hidden">
             <input name="price" value="${price}" type="hidden">

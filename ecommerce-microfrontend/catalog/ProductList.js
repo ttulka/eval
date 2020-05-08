@@ -18,10 +18,7 @@ customElements.define('catalog-product-list', class extends HTMLElement {
             style: 'currency',
             currency: 'USD',
         });
-        const inStock = stock.reduce((a, {productId, inStock}) => {
-            a[productId] = inStock;
-            return a;
-        }, []);
+        const inStock = stock.reduce((a, {productId, inStock}) => ({...a, [productId]: inStock}), {});
         
         return `
         <h1>Product Catalog</h1>
