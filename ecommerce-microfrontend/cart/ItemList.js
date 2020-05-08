@@ -1,8 +1,21 @@
 customElements.define('cart-item-list', class extends HTMLElement {
+    constructor() {
+        super();
+        this.removeFromCart = productId => console.log('Removing from cart', productId);
+        this._listeners = [];
+    }
     connectedCallback() {
         fetch('/data/cart/items.json')
             .then(b => b.json())
-            .then(d => this.render(this.html(d)));
+            .then(d => this.render(this.html(d)))
+            .then(_ => this.querySelectorAll('.cart-remove').forEach(el => {
+                const l = e => this.removeFromCart(e.target.getAttribute('productId'));
+                el.addEventListener('click', l);
+                this._listeners.push({el, l});
+            }));
+    }
+    disconnectedCallback() {
+        this._listeners.forEach(({el, l}) => el.removeEventListener('click', l));
     }
     render(html) {
         this.innerHTML = html;
@@ -25,7 +38,7 @@ customElements.define('cart-item-list', class extends HTMLElement {
                         <td class="price">${formatter.format(price)}</td>
                         <td class="quantity">${quantity}</td>
                         <td class="remove">
-                            <a href="/cart/remove?productId=${productId}">&#x2718;</a>
+                            <a href="/cart" class="cart-remove" productId="${productId}">&#x2718;</a>
                         </td>
                     </tr>
                 `).join('')}

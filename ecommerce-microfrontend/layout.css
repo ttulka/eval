@@ -78,6 +78,13 @@ cart-menu-link a {
     color: darkgreen;
 }
 
+.cart-buy {
+    border: 1px solid #888;
+    background-color: #ddd;
+    padding: 0.2em 0.5em;
+    text-decoration: none;
+}
+
 .cart .item td {
     border-bottom: 1px solid grey;
 }

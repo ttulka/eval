@@ -7,7 +7,7 @@ customElements.define('cart-buy-button', class extends HTMLElement {
     connectedCallback() {
         this.render(this.html());
         
-        this.button = this.querySelector('button');
+        this.button = this.querySelector('.cart-buy');
         this.buttonClick = e => this.addIntoCart(
             this.getAttribute('productId'),
             this.getAttribute('title'),
@@ -25,7 +25,7 @@ customElements.define('cart-buy-button', class extends HTMLElement {
     }
     html() {
         return `
-        <button type="button">buy</button>
+        <a href="/cart" class="cart-buy">buy</a>
         `;
     }
 });
