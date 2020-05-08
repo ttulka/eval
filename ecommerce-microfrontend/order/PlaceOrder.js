@@ -4,10 +4,7 @@ customElements.define('order-place-order', class extends HTMLElement {
     constructor() {
         super();
         this.orderId = Date.now();
-        this.placeOrder = () => {
-            console.log('Placing order', this.orderId);
-            //this.querySelector('.order').innerHTML = 'Order has been successfully created.';
-        }
+        this.placeOrder = () => console.log('Placing order', this.orderId);
     }
     connectedCallback() {
         this.render(this.html());
@@ -17,6 +14,8 @@ customElements.define('order-place-order', class extends HTMLElement {
             this.placeOrder();
             this.deliveryForm.dispatchEvent(
                 new CustomEvent('order:placed', {detail: {orderId: this.orderId}}));
+            
+            this.querySelector('.order').innerHTML = 'Order has been successfully created.';
             e.preventDefault();
         }
         this.form = this.querySelector('.order-form');
