@@ -1,13 +1,46 @@
+const template = document.createElement('template');
+template.innerHTML = `
+    <a href="/cart" class="cart">&#x1F6D2; <span class="amount"></span></a>
+`;
 customElements.define('cart-menu-link', class extends HTMLElement {
+    constructor() {
+        super();        
+        this._products = new Set();
+        this._addItemListener = ({detail:{productId}}) => this.addItem(productId);
+        this._removeItemListener = ({detail:{productId}}) => this.removeItem(productId);
+        this._emptyCartListener = e => this.emptyCart();
+    }
     connectedCallback() {
-        this.render(this.html());
+        this.appendChild(template.content.cloneNode(true));
+        this._amountEl = this.querySelector('.amount');
+        
+        window.addEventListener('cart:add', this._addItemListener);
+        window.addEventListener('cart:remove', this._removeItemListener);
+        window.addEventListener('cart:empty', this._emptyCartListener);
     }
-    render(html) {
-        this.innerHTML = html;
+    disconnectedCallback() {        
+        window.removeEventListener('cart:add', this._addItemListener);
+        window.removeEventListener('cart:remove', this._removeItemListener);
+        window.removeEventListener('cart:empty', this._emptyCartListener);
     }
-    html() {
-        return `
-        <a href="/cart" class="cart">&#x1F6D2;</a>
-        `;
+    set amount(amount) {
+        console.debug('set amount', amount);
+        this._amount = amount;
+        this._amountEl.innerHTML = amount ? amount : '';
+    }
+    addItem(productId) {
+        this._products.add(productId);
+        this._updateAmount();
+    }
+    removeItem(productId) {
+        this._products.delete(productId);
+        this._updateAmount();
+    }
+    emptyCart() {
+        this._products.clear();
+        this._updateAmount();
+    }
+    _updateAmount() {
+        this.amount = this._products.size; 
     }
 });

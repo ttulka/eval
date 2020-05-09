@@ -1,2 +1,0 @@
-- Place order: items from cart
-- Catalog: products from categories

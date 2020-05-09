@@ -1,53 +1,60 @@
+const template = document.createElement('template');
+template.innerHTML = `
+    <table class="items" cellpadding="10" cellspacing="0" border="0">
+    </table>
+`;
 customElements.define('cart-item-list', class extends HTMLElement {
     constructor() {
         super();
-        this.removeFromCart = productId => console.log('Removing from cart', productId);
+        this._items = [];
         this._listeners = [];
     }
     connectedCallback() {
-        fetch('/data/cart/items.json')
-            .then(b => b.json())
-            .then(d => this.render(this.html(d)))
-            .then(_ => this.querySelectorAll('.cart-remove').forEach(el => {
-                const l = e => this.removeFromCart(e.target.getAttribute('productId'));
-                el.addEventListener('click', l);
-                this._listeners.push({el, l});
-            }));
+        this.appendChild(template.content.cloneNode(true));
+        this._itemsEl = this.querySelector('.items');
     }
     disconnectedCallback() {
+        this._removeListeners();
+    }
+    set items(items) {
+        console.debug('cart items set', items);
+        this._items = items;
+        this._removeListeners();
+        this._render();
+    }
+    _removeListeners() {
         this._listeners.forEach(({el, l}) => el.removeEventListener('click', l));
+        this._listeners = [];
     }
-    render(html) {
-        this.innerHTML = html;
-    }
-    html(items) {
-        const formatter = new Intl.NumberFormat('en-US', {
+    _render(html) {
+        const formatPrice = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
-        });
+        }).format;
         
-        return `
-        <h1>Shopping Cart</h1>
-
-        <div class="cart">
-
-            <table cellpadding="10" cellspacing="0" border="0">
-                ${items.map(({productId, title, price, quantity}) => `
-                    <tr class="item">
-                        <td class="title">${title}</td>
-                        <td class="price">${formatter.format(price)}</td>
-                        <td class="quantity">${quantity}</td>
-                        <td class="remove">
-                            <a href="/cart" class="cart-remove" productId="${productId}">&#x2718;</a>
-                        </td>
-                    </tr>
-                `).join('')}
-            </table>
-
-            <div class="order">
-                <a href="/order">Place Order</a>
-            </div>
-        </div>
-        `;
+        this._items.map(({productId, title, price, quantity}) => {
+            const template = document.createElement('template');
+            template.innerHTML = `
+                <tr class="item">
+                    <td class="title">${title}</td>
+                    <td class="price">${formatPrice(price)}</td>
+                    <td class="quantity">${quantity}</td>
+                    <td>
+                        <span class="remove">&#x2718;</span>
+                    </td>
+                </tr>`;
+            this._itemsEl.appendChild(template.content);
+            const el = this._itemsEl.lastChild;
+                
+            const removeListener = e => {
+                e.preventDefault();
+                this._items = this._items.reduce((a, c) => productId === c.productId ? a : [...a, c], []);
+                el.innerHTML = '';
+                window.dispatchEvent(new CustomEvent('cart:remove', {detail: {productId}}));
+            };
+            const removeEl = el.querySelector('.remove');
+            removeEl.addEventListener('click', removeListener);
+            this._listeners.push({el: removeEl, l: removeListener});
+        });
     }
 });

@@ -78,19 +78,21 @@ cart-menu-link a {
     color: darkgreen;
 }
 
-.cart-buy {
+cart-buy-button .buy {
     border: 1px solid #888;
     background-color: #ddd;
     padding: 0.2em 0.5em;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .cart .item td {
     border-bottom: 1px solid grey;
 }
-.cart .item .remove a {
+.cart .item .remove {
     text-decoration: none;
     color: red;
+    cursor: pointer;
 }
 .cart .item .quantity {
     font-weight: bold;

@@ -1,44 +1,71 @@
-import '../cart/BuyButton.js';
-
+const template = document.createElement('template');
+template.innerHTML = `
+    <table class="products" cellpadding="10" cellspacing="0" border="0">
+    </table>
+`;
 customElements.define('catalog-product-list', class extends HTMLElement {
+    constructor() {
+        super();
+        this._products = [];
+        this._inStock = [];
+        this._listeners = [];
+    }
     connectedCallback() {
-        const products = fetch('/data/catalog/products.json')
-            .then(b => b.json());
-        const stock = fetch('/data/warehouse/stock.json')
-            .then(b => b.json());
-        Promise.all([products, stock])
-            .catch(e => console.error('Cannot fetch data', e))
-            .then(([p, s]) => this.render(this.html(p, s)));
+        this.appendChild(template.content.cloneNode(true));
+        this._productsEl = this.querySelector('.products');
     }
-    render(html) {
-        this.innerHTML = html;
+    disconnectedCallback() {
+        this._removeListeners();
     }
-    html(products, stock) {
-        const formatter = new Intl.NumberFormat('en-US', {
+    set products(products) {
+        console.debug('products set', products);
+        this._products = products;
+        this._render();
+    }
+    set stock(stock) {
+        console.debug('stock set', stock);
+        this._inStock = stock.reduce((a, {productId, inStock}) => ({...a, [productId]: inStock}), {});
+        this._renderInStock();
+    }
+    _removeListeners() {
+        this._listeners.forEach(({el, l}) => el.removeEventListener('click', l));
+        this._listeners = [];
+    }
+    _render() {
+        const formatPrice = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
-        });
-        const inStock = stock.reduce((a, {productId, inStock}) => ({...a, [productId]: inStock}), {});
+        }).format;
         
-        return `
-        <h1>Product Catalog</h1>
-
-        <table class="products" cellpadding="10" cellspacing="0" border="0">
-            ${products.map(product => `
-                <tr class="product">
-                    <th>${product.title}</th>
-                    <td>${product.description}</td>
-                    <td class="stock">${inStock[product.id] > 0 ? inStock[product.id] + ' left in stock' : 'sold out'}</td>
-                    <td class="price">${formatter.format(product.price)}</td>
+        this._products.map(({id, title, description, price}) => {
+            const template = document.createElement('template');
+            template.innerHTML = `
+                <tr class="product" id="product-${id}">
+                    <th>${title}</th>
+                    <td>${description}</td>
+                    <td class="stock">${this._inStockValue(id)}</td>
+                    <td class="price">${formatPrice(price)}</td>
                     <td><cart-buy-button 
-                            productId="${product.id}" 
-                            title="${product.title}" 
-                            price="${product.price}">
+                            productId="${id}" 
+                            title="${title}" 
+                            price="${price}">
                         </cart-buy-button>
                     </td>
-                </tr>
-            `).join('')}
-        </table>
-        `;
+                </tr>`;
+            this._productsEl.appendChild(template.content);
+        });
+    }
+    _renderInStock() {
+        this._products.forEach(({id}) => {
+            const stockEl = this._productsEl.querySelector('#product-' + id + ' .stock');
+            if (stockEl) {
+                stockEl.innerHTML = this._inStockValue(id);
+            }
+        });
+    }
+    _inStockValue(productId){
+        return this._inStock[productId] !== undefined
+            ? this._inStock[productId] > 0 ? this._inStock[productId] + ' left in stock' : 'sold out'
+            : '...';
     }
 });

@@ -20,51 +20,42 @@
     </footer>
 
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <script type="module">
-        // Application assembling        
+    <script>
+        const routes = {
+            '/': 'catalog-product-list',
+            '/cart': 'cart-item-list',
+            '/order': 'order-place-order'
+        };
+        
         const appContent = document.querySelector("#content");
         
-        function findComponentName(href) {
-            if (href === '/' || href.startsWith('/catalog')) {
-                return 'portal-catalog-page';
-            }
-            if (href.startsWith('/cart')) {
-                return 'portal-cart-page';
-            }
-            if (href.startsWith('/order')) {
-                return 'portal-order-page';
-            }
-        }
         function loadComponent(href) {
-            const componentName = findComponentName(href);
-            console.debug('Loading component', componentName);
+            const componentName = routes[href];
             const component = componentName 
-                ? document.createElement(componentName)
-                : document.createTextNode('not found: ' + href);
+                ? document.createElement(componentName) 
+                : document.createTextNode('not found');
             if (appContent.firstChild) {
                 appContent.replaceChild(component, appContent.firstChild);
             } else {
                 appContent.appendChild(component);
             }
         }
-        function navigateTo(href) {
-            history.pushState({id: Date.now()}, href, href);
-            loadComponent(href);
-        }
+        
         document.addEventListener('click', e => {
             if (e.target.nodeName === 'A') {
-                navigateTo(e.target.getAttribute('href'));
+                const href = e.target.getAttribute('href');
+                history.pushState({id: Date.now()}, href, href);
+                loadComponent(href);
                 e.preventDefault();
             }
         });
-        window.addEventListener('page:nav', ({detail: {href}}) => navigateTo(href));
-        
+
         loadComponent(location.pathname);
     </script>
     <script src="/catalog/CategoriesMenu.js" type="module" async></script>
     <script src="/cart/MenuLink.js" type="module" async></script>
-    <script src="/portal/CatalogPage.js" type="module" async></script>
-    <script src="/portal/CartPage.js" type="module" async></script>
-    <script src="/portal/OrderPage.js" type="module" async></script>
+    <script src="/catalog/ProductList.js" type="module" async></script>
+    <script src="/cart/ItemList.js" type="module" async></script>
+    <script src="/order/PlaceOrder.js" type="module" async></script>
 </body>
 </html>
