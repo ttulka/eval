@@ -39,6 +39,9 @@ a {
 .error {
     color: red;
 }
+input.error {
+    border: 1px solid red;
+}
 
 catalog-categories-menu {
     float: left;

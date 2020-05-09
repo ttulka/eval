@@ -16,6 +16,7 @@ template.innerHTML = `
 customElements.define('delivery-form', class extends HTMLElement {
     constructor() {
         super();
+        this._keydownListener = e => e.target.classList.remove('error');
         this._formSubmitListener = e => e.preventDefault();
     }
     connectedCallback() {
@@ -25,9 +26,13 @@ customElements.define('delivery-form', class extends HTMLElement {
         this._nameInp = this._formEl.querySelector('input[name=name]');
         this._addressInp = this._formEl.querySelector('input[name=address]');
         
+        this._nameInp.addEventListener('keydown', this._keydownListener);
+        this._addressInp.addEventListener('keydown', this._keydownListener);
         this._formEl.addEventListener('submit', this._formSubmitListener);
     } 
     disconnectedCallback() {
+        this._nameInp.removeEventListener('keydown', this._keydownListener);
+        this._addressInp.removeEventListener('keydown', this._keydownListener);
         this._formEl.removeEventListener('submit', this._formSubmitListener);
     }
     isValid() {
@@ -35,7 +40,8 @@ customElements.define('delivery-form', class extends HTMLElement {
             this._addressInp.value && this._addressInp.value.trim();
     }
     markAsInvalid() {
-        console.log('delivery form marked as invalid');
+        this._nameInp.classList.add('error');
+        this._addressInp.classList.add('error');
     }
     submit() {
         const name = this._nameInp.value;
