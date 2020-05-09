@@ -40,8 +40,12 @@ customElements.define('delivery-form', class extends HTMLElement {
             this._addressInp.value && this._addressInp.value.trim();
     }
     markAsInvalid() {
-        this._nameInp.classList.add('error');
-        this._addressInp.classList.add('error');
+        if (!(this._nameInp.value && this._nameInp.value.trim())) {
+            this._nameInp.classList.add('error');
+        }
+        if (!(this._addressInp.value && this._addressInp.value.trim())) {
+            this._addressInp.classList.add('error');
+        }
     }
     submit() {
         const name = this._nameInp.value;
