@@ -1,14 +1,20 @@
-export default {
-    items: () => 
-        fetch('/data/cart/items.json')
-            .then(b => b.json())
-            .catch(console.error),
-    
-    addItem: ({productId, title, price, quantity}) => 
-        Promise.resolve(console.log('Adding item into cart', productId, title, price, quantity)),
+let state = [];
 
-    removeItem: (productId) => 
-        Promise.resolve(console.log('Removing item from cart', productId)),
+export default {
+    items: () => Promise.resolve([...state]),
     
-    empty: () => Promise.resolve(console.log('Emptying cart')),
+    addItem: ({productId, title, price, quantity}) => new Promise(resolve => {
+	    const curr = state.find(i => productId === i.productId);
+        if (curr) {
+            curr.quantity += quantity;
+        } else {
+            state.push({productId, title, price, quantity});
+        }
+        resolve();
+    }),
+
+    removeItem: (productId) => Promise.resolve(
+        state = state.reduce((a,c) => productId === c.productId ? a : [...a, c], [])),
+    
+    empty: () => Promise.resolve(state = []),
 }
