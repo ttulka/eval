@@ -7,25 +7,21 @@ import './portal/OrderPage.js';
     const appContent = document.querySelector("#content");
 
     const registeredPages = [];
-    let firstLoaded = false;
         
     function createComponent(path) {
-        const reg = registeredPages.find(r => r.matches(path));
-        if (reg) {
-            firstLoaded = true;
-            return reg.component(path);
+        const c = registeredPages.find(r => r.matches(path)) 
+            || {component: path => document.createTextNode('not found: ' + path)};
+        return c.component(path);
+    }
+    function showComponent(component) {
+        if (appContent.firstChild) {
+            appContent.replaceChild(component, appContent.firstChild);
+        } else {
+            appContent.appendChild(component);
         }
-        return firstLoaded ? document.createTextNode('not found: ' + path) : null;
     }
     function loadComponent(path) {
-        const component = createComponent(path);
-        if (component) {
-            if (appContent.firstChild) {
-                appContent.replaceChild(component, appContent.firstChild);
-            } else {
-                appContent.appendChild(component);
-            }
-        }
+        showComponent(createComponent(path));
      }
      function navigateTo(href) {
         history.pushState({id: Date.now()}, href, href);
@@ -33,8 +29,9 @@ import './portal/OrderPage.js';
      }
      function register(matches, component) {
         registeredPages.push({matches, component});
-        if (!firstLoaded) {
-            loadComponent(window.location.pathname);
+        const path = window.location.pathname;
+        if (matches(path)) {
+            showComponent(component(path));
         }
      }
      document.addEventListener('click', e => {

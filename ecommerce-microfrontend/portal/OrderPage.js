@@ -8,6 +8,9 @@ import cartService from '../service/cart.js';
 import {register} from './page.js';
 
 const pageName = 'portal-order-page';
+
+register(pageName, '/order');
+
 const template = document.createElement('template');
 template.innerHTML = `
     <h1>Place Order</h1>
@@ -68,5 +71,3 @@ customElements.define(pageName, class extends HTMLElement {
         deliveryService.prepare(orderId, delivery);
     }
 });
-
-register(pageName, '/order');

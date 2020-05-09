@@ -8,6 +8,10 @@ import cartService from '../service/cart.js';
 import {register} from './page.js';
 
 const pageName = 'portal-catalog-page';
+
+register(pageName, '/');
+register(pageName, path => path.startsWith('/category'), (c, path) => c.categoryUri = path.substring(path.lastIndexOf('/') + 1));
+
 const template = document.createElement('template');
 template.innerHTML = `
     <h1>Product Catalog</h1>
@@ -37,6 +41,7 @@ customElements.define(pageName, class extends HTMLElement {
         this._productList.removeEventListener('cart:add', this._addItemListener);
     }
     set categoryUri(uri) {
+        console.debug('categoryUri set', uri);
         this._categoryUri = uri;
     }
     loadProducts() {
@@ -54,6 +59,3 @@ customElements.define(pageName, class extends HTMLElement {
             .then(window.dispatchEvent(new CustomEvent('cart:added', {detail: {...item}})));
     }
 });
-
-register(pageName, '/');
-register(pageName, path => path.startsWith('/category'), (c, path) => c.categoryUri = path.substring(path.lastIndexOf('/') + 1));

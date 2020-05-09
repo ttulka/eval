@@ -5,7 +5,7 @@ export default {
             .catch(console.error),
         
     productsFromCategory: uri => 
-        fetch('/data/catalog/products-category.json')
+        fetch(`/data/catalog/products-${uri}.json`)
             .then(b => b.json())
             .catch(console.error),
 

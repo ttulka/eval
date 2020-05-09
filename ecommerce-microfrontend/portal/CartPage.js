@@ -5,6 +5,9 @@ import cartService from '../service/cart.js';
 import {register} from './page.js';
 
 const pageName = 'portal-cart-page';
+
+register(pageName, '/cart');
+
 const template = document.createElement('template');
 template.innerHTML = `
     <h1>Shopping Cart</h1>
@@ -42,5 +45,3 @@ customElements.define(pageName, class extends HTMLElement {
             .then(_ => window.dispatchEvent(new CustomEvent('cart:removed', {detail: {productId}})));
     }
 });
-
-register(pageName, '/cart');
