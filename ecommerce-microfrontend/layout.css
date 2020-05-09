@@ -9,6 +9,10 @@ body {
 a {
     color: inherit;
 }
+input {
+    border: 1px solid gray;
+    padding: 0.2em 0.5em;
+}
 
 #header {
     background-color: olivedrab;
@@ -40,7 +44,7 @@ a {
     color: red;
 }
 input.error {
-    border: 1px solid red;
+    border-color: red;
 }
 
 catalog-categories-menu {
