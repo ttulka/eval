@@ -12,6 +12,7 @@ customElements.define('cart-menu-link', class extends HTMLElement {
     }
     connectedCallback() {
         this.appendChild(template.content.cloneNode(true));
+        
         this._amountEl = this.querySelector('.amount');
         
         window.addEventListener('cart:add', this._addItemListener);

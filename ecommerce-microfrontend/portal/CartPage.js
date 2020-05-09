@@ -1,4 +1,5 @@
 import '../cart/ItemList.js';
+
 import cart from '../service/cart.js';
 
 const template = document.createElement('template');

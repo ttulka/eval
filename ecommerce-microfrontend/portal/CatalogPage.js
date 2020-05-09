@@ -1,5 +1,6 @@
 import '../catalog/ProductList.js';
 import '../cart/BuyButton.js';
+
 import catalogService from '../service/catalog.js';
 import warehouseService from '../service/warehouse.js';
 import cartService from '../service/cart.js';
@@ -12,7 +13,7 @@ template.innerHTML = `
 customElements.define('portal-catalog-page', class extends HTMLElement {
     constructor() {
         super();        
-        this.href = window.location.pathname;     
+        this._categoryUri = null;
         this._addItemListener = e => {
             this._addItemIntoCart(e.detail)
                 .then(_ => window.dispatchEvent(new CustomEvent('page:nav', {detail: {href: '/cart'}})));
@@ -27,14 +28,17 @@ customElements.define('portal-catalog-page', class extends HTMLElement {
         
         this._productList.addEventListener('cart:add', this._addItemListener);
                 
-        this._loadProducts();
+        this.loadProducts();
     }
     disconnectedCallback() {
         this._productList.removeEventListener('cart:add', this._addItemListener);
     }
-    _loadProducts() {
-        const products = this.href.startsWith('/catalog/')
-            ? catalogService.fromCategory(this.href.substring(this.href.lastIndexOf('/') + 1))
+    set categoryUri(uri) {
+        this._categoryUri = uri;
+    }
+    loadProducts() {
+        const products = this._categoryUri
+            ? catalogService.fromCategory(this._categoryUri)
             : catalogService.all();        
         products
             .then(p => this._productList.products = p)
