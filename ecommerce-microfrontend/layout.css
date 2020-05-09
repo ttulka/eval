@@ -2,7 +2,7 @@ body {
     font-family: sans-serif;
     padding: 0;
     margin: 0;
-    background-color: beige;
+    background-color: #ffffe6;
     color: #222;
 }
 
@@ -15,7 +15,7 @@ input {
 }
 
 #header {
-    background-color: olivedrab;
+    background-color: #66a3ff;
     color: white;
     font-weight: bold;
     padding: 0 2em;
@@ -67,6 +67,7 @@ cart-menu-link {
 }
 cart-menu-link a {
     text-decoration: none;
+    color: yellow;
 }
 
 .products .product th, .products .product td {
