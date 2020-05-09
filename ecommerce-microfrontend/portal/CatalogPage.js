@@ -38,8 +38,8 @@ customElements.define('portal-catalog-page', class extends HTMLElement {
     }
     loadProducts() {
         const products = this._categoryUri
-            ? catalogService.fromCategory(this._categoryUri)
-            : catalogService.all();        
+            ? catalogService.productsFromCategory(this._categoryUri)
+            : catalogService.products();        
         products
             .then(p => this._productList.products = p)
             .then(p => p.map(({id}) => id))
