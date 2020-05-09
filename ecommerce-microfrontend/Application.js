@@ -5,35 +5,37 @@ import './portal/OrderPage.js';
 
 (function application() {
     const appContent = document.querySelector("#content");
+
+    const registeredPages = [];
+    let firstLoaded = false;
         
-    function createComponent(href) {
-        if (href === '/') {
-            return document.createElement('portal-catalog-page');
+    function createComponent(path) {
+        const reg = registeredPages.find(r => r.matches(path));
+        if (reg) {
+            firstLoaded = true;
+            return reg.component(path);
         }
-        if (href.startsWith('/category')) {
-            const c = document.createElement('portal-catalog-page');
-            c.categoryUri = href.substring(href.lastIndexOf('/') + 1);
-            return c;
-        }
-        if (href.startsWith('/cart')) {
-            return document.createElement('portal-cart-page');
-        }
-        if (href.startsWith('/order')) {
-            return document.createElement('portal-order-page');
-        }
-        return document.createTextNode('not found: ' + href);
+        return firstLoaded ? document.createTextNode('not found: ' + path) : null;
     }
-    function loadComponent(href) {
-        const component = createComponent(href);
-        if (appContent.firstChild) {
-            appContent.replaceChild(component, appContent.firstChild);
-        } else {
-            appContent.appendChild(component);
+    function loadComponent(path) {
+        const component = createComponent(path);
+        if (component) {
+            if (appContent.firstChild) {
+                appContent.replaceChild(component, appContent.firstChild);
+            } else {
+                appContent.appendChild(component);
+            }
         }
      }
      function navigateTo(href) {
         history.pushState({id: Date.now()}, href, href);
         loadComponent(href);
+     }
+     function register(matches, component) {
+        registeredPages.push({matches, component});
+        if (!firstLoaded) {
+            loadComponent(window.location.pathname);
+        }
      }
      document.addEventListener('click', e => {
         if (e.target.nodeName === 'A') {
@@ -42,6 +44,7 @@ import './portal/OrderPage.js';
         }
      });
      window.addEventListener('page:nav', ({detail: {href}}) => navigateTo(href));
-        
-     loadComponent(location.pathname);
+     window.addEventListener('page:register', ({detail: {matches, component}}) => register(matches, component));
+
+     window.dispatchEvent(new CustomEvent('application:ready'));
 })();

@@ -5,12 +5,15 @@ import catalogService from '../service/catalog.js';
 import warehouseService from '../service/warehouse.js';
 import cartService from '../service/cart.js';
 
+import {register} from './page.js';
+
+const pageName = 'portal-catalog-page';
 const template = document.createElement('template');
 template.innerHTML = `
     <h1>Product Catalog</h1>
     <catalog-product-list></catalog-product-list>
 `;
-customElements.define('portal-catalog-page', class extends HTMLElement {
+customElements.define(pageName, class extends HTMLElement {
     constructor() {
         super();        
         this._categoryUri = null;
@@ -51,3 +54,6 @@ customElements.define('portal-catalog-page', class extends HTMLElement {
             .then(window.dispatchEvent(new CustomEvent('cart:added', {detail: {...item}})));
     }
 });
+
+register(pageName, '/');
+register(pageName, path => path.startsWith('/category'), (c, path) => c.categoryUri = path.substring(path.lastIndexOf('/') + 1));

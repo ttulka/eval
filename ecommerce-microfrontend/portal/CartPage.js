@@ -2,17 +2,20 @@ import '../cart/ItemList.js';
 
 import cartService from '../service/cart.js';
 
+import {register} from './page.js';
+
+const pageName = 'portal-cart-page';
 const template = document.createElement('template');
 template.innerHTML = `
     <h1>Shopping Cart</h1>
     <div class="cart">
         <cart-item-list></cart-item-list>
         <div class="order">
-            <a href="/order">Place Order</a>
+            <a href="/order" class="place">Place Order</a>
         </div>
     </div>
 `;
-customElements.define('portal-cart-page', class extends HTMLElement {
+customElements.define(pageName, class extends HTMLElement {
     constructor() {
         super();
         this._removeItemListener = ({detail: {productId}}) => this._removeItem(productId);
@@ -39,3 +42,5 @@ customElements.define('portal-cart-page', class extends HTMLElement {
             .then(_ => window.dispatchEvent(new CustomEvent('cart:removed', {detail: {productId}})));
     }
 });
+
+register(pageName, '/cart');
