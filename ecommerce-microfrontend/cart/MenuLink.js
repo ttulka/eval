@@ -12,17 +12,17 @@ customElements.define('cart-menu-link', class extends HTMLElement {
     }
     connectedCallback() {
         this.appendChild(template.content.cloneNode(true));
-        
+
         this._amountEl = this.querySelector('.amount');
         
-        window.addEventListener('cart:add', this._addItemListener);
-        window.addEventListener('cart:remove', this._removeItemListener);
-        window.addEventListener('cart:empty', this._emptyCartListener);
+        window.addEventListener('cart:added', this._addItemListener);
+        window.addEventListener('cart:removed', this._removeItemListener);
+        window.addEventListener('cart:emptied', this._emptyCartListener);
     }
     disconnectedCallback() {        
-        window.removeEventListener('cart:add', this._addItemListener);
-        window.removeEventListener('cart:remove', this._removeItemListener);
-        window.removeEventListener('cart:empty', this._emptyCartListener);
+        window.removeEventListener('cart:added', this._addItemListener);
+        window.removeEventListener('cart:removed', this._removeItemListener);
+        window.removeEventListener('cart:emptied', this._emptyCartListener);
     }
     set amount(amount) {
         console.debug('set amount', amount);

@@ -53,9 +53,11 @@ customElements.define('portal-order-page', class extends HTMLElement {
     _placeOrder(orderId, items) {
         orderService.place(orderId, items)
             .then(_ => {
-                cartService.empty();
-                window.dispatchEvent(new CustomEvent('cart:empty'));                
                 window.dispatchEvent(new CustomEvent('order:placed', {detail: {orderId}}));
+
+                cartService.empty()
+                    .then(_ => window.dispatchEvent(new CustomEvent('cart:emptied')));
+                
             });
         this._orderEl.innerHTML = '<p class="success">Order has been successfully created.</p>';
     }

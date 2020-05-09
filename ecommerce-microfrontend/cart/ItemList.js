@@ -50,7 +50,7 @@ customElements.define('cart-item-list', class extends HTMLElement {
                 e.preventDefault();
                 this._items = this._items.reduce((a, c) => productId === c.productId ? a : [...a, c], []);
                 el.innerHTML = '';
-                window.dispatchEvent(new CustomEvent('cart:remove', {detail: {productId}}));
+                this.dispatchEvent(new CustomEvent('cart:remove', {detail: {productId}}));
             };
             const removeEl = el.querySelector('.remove');
             removeEl.addEventListener('click', removeListener);
