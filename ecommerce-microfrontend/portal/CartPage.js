@@ -14,13 +14,14 @@ template.innerHTML = `
     <div class="cart">
         <cart-item-list></cart-item-list>
         <div class="order">
-            <a href="/order" class="place">Place Order</a>
+            <a href="/order">Place Order</a>
         </div>
     </div>
 `;
 customElements.define(pageName, class extends HTMLElement {
     constructor() {
         super();
+        this._itemsCount = 0;
         this._removeItemListener = ({detail: {productId}}) => this._removeItem(productId);
     }
     connectedCallback() {
@@ -28,9 +29,11 @@ customElements.define(pageName, class extends HTMLElement {
         
         this.appendChild(template.content.cloneNode(true));         
         this._itemList = this.querySelector('cart-item-list');  
+        this._placeOrder = this.querySelector('.order');
 
         this._itemList.addEventListener('cart:remove', this._removeItemListener);
                 
+        this._togglePlaceOrder();
         this._loadItems();
     }
     disconnectedCallback() {
@@ -38,10 +41,25 @@ customElements.define(pageName, class extends HTMLElement {
     }
     _loadItems() {
         cartService.items()
-            .then(i => this._itemList.items = i);
+            .then(items => {
+                this._itemList.items = items;
+
+                this._itemsCount = items.length;
+                this._togglePlaceOrder();
+            });
     }
     _removeItem(productId) {
         cartService.removeItem(productId)
             .then(_ => window.dispatchEvent(new CustomEvent('cart:removed', {detail: {productId}})));
+
+        this._itemsCount--;
+        this._togglePlaceOrder();
+    }
+    _togglePlaceOrder() {
+        if (this._itemsCount) {
+            this._placeOrder.style.display = 'block';
+        } else {
+            this._placeOrder.style.display = 'none';
+        }
     }
 });
