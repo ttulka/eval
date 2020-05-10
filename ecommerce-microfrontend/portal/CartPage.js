@@ -57,7 +57,7 @@ customElements.define(pageName, class extends HTMLElement {
     }
     _togglePlaceOrder() {
         if (this._itemsCount) {
-            this._placeOrder.style.display = 'block';
+            this._placeOrder.style.display = '';
         } else {
             this._placeOrder.style.display = 'none';
         }
