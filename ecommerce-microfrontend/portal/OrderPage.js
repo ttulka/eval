@@ -51,7 +51,8 @@ customElements.define('portal-order-page', class extends HTMLElement {
             .then(items => this._orderForm.items = items);
     }
     _placeOrder(orderId, items) {
-        orderService.place(orderId, items)
+        const total = items.reduce((acc, i) => acc + i.price * i.quantity, 0.0);
+        orderService.place(orderId, items, total)
             .then(_ => {
                 window.dispatchEvent(new CustomEvent('order:placed', {detail: {orderId}}));
 
