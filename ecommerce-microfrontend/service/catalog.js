@@ -1,11 +1,11 @@
 export default {
-    all: () => 
+    products: () => 
         fetch('/data/catalog/products.json')
             .then(b => b.json())
             .catch(console.error),
         
-    fromCategory: uri => 
-        fetch('/data/catalog/products-category.json')
+    productsFromCategory: uri => 
+        fetch(`/data/catalog/products-${uri}.json`)
             .then(b => b.json())
             .catch(console.error),
 

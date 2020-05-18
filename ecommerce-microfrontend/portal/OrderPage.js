@@ -5,6 +5,12 @@ import orderService from '../service/order.js';
 import deliveryService from '../service/delivery.js';
 import cartService from '../service/cart.js';
 
+import {register} from './page.js';
+
+const pageName = 'portal-order-page';
+
+register(pageName, '/order');
+
 const template = document.createElement('template');
 template.innerHTML = `
     <h1>Place Order</h1>
@@ -13,7 +19,7 @@ template.innerHTML = `
         <order-form></order-form>
     </div>
 `;
-customElements.define('portal-order-page', class extends HTMLElement {
+customElements.define(pageName, class extends HTMLElement {
     constructor() {
         super();
         this._orderId = Date.now();

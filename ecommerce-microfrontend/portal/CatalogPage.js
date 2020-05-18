@@ -5,12 +5,19 @@ import catalogService from '../service/catalog.js';
 import warehouseService from '../service/warehouse.js';
 import cartService from '../service/cart.js';
 
+import {register} from './page.js';
+
+const pageName = 'portal-catalog-page';
+
+register(pageName, '/');
+register(pageName, path => path.startsWith('/category'), (c, path) => c.categoryUri = path.substring(path.lastIndexOf('/') + 1));
+
 const template = document.createElement('template');
 template.innerHTML = `
     <h1>Product Catalog</h1>
     <catalog-product-list></catalog-product-list>
 `;
-customElements.define('portal-catalog-page', class extends HTMLElement {
+customElements.define(pageName, class extends HTMLElement {
     constructor() {
         super();        
         this._categoryUri = null;
@@ -34,12 +41,13 @@ customElements.define('portal-catalog-page', class extends HTMLElement {
         this._productList.removeEventListener('cart:add', this._addItemListener);
     }
     set categoryUri(uri) {
+        console.debug('categoryUri set', uri);
         this._categoryUri = uri;
     }
     loadProducts() {
         const products = this._categoryUri
-            ? catalogService.fromCategory(this._categoryUri)
-            : catalogService.all();        
+            ? catalogService.productsFromCategory(this._categoryUri)
+            : catalogService.products();        
         products
             .then(p => this._productList.products = p)
             .then(p => p.map(({id}) => id))

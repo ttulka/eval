@@ -5,35 +5,34 @@ import './portal/OrderPage.js';
 
 (function application() {
     const appContent = document.querySelector("#content");
+
+    const registeredPages = [];
         
-    function createComponent(href) {
-        if (href === '/') {
-            return document.createElement('portal-catalog-page');
-        }
-        if (href.startsWith('/category')) {
-            const c = document.createElement('portal-catalog-page');
-            c.categoryUri = href.substring(href.lastIndexOf('/') + 1);
-            return c;
-        }
-        if (href.startsWith('/cart')) {
-            return document.createElement('portal-cart-page');
-        }
-        if (href.startsWith('/order')) {
-            return document.createElement('portal-order-page');
-        }
-        return document.createTextNode('not found: ' + href);
+    function createComponent(path) {
+        const c = registeredPages.find(r => r.matches(path)) 
+            || {component: path => document.createTextNode('not found: ' + path)};
+        return c.component(path);
     }
-    function loadComponent(href) {
-        const component = createComponent(href);
+    function showComponent(component) {
         if (appContent.firstChild) {
             appContent.replaceChild(component, appContent.firstChild);
         } else {
             appContent.appendChild(component);
         }
+    }
+    function loadComponent(path) {
+        showComponent(createComponent(path));
      }
      function navigateTo(href) {
         history.pushState({id: Date.now()}, href, href);
         loadComponent(href);
+     }
+     function register(matches, component) {
+        registeredPages.push({matches, component});
+        const path = window.location.pathname;
+        if (matches(path)) {
+            showComponent(component(path));
+        }
      }
      document.addEventListener('click', e => {
         if (e.target.nodeName === 'A') {
@@ -42,6 +41,7 @@ import './portal/OrderPage.js';
         }
      });
      window.addEventListener('page:nav', ({detail: {href}}) => navigateTo(href));
-        
-     loadComponent(location.pathname);
+     window.addEventListener('page:register', ({detail: {matches, component}}) => register(matches, component));
+
+     window.dispatchEvent(new CustomEvent('application:ready'));
 })();
