@@ -4,7 +4,7 @@
 # print(2 ** 3) # 2^3 == 8
 
 # print(7 / 3) # 2.3333333333333335
-# print(7 // 3) # 5 div 3 == 1 
+# print(7 // 3) # 5 div 3 == 1
 
 # print(type(bin(5)))
 
@@ -63,5 +63,64 @@
 # for i in "ahoj sveet!":
 #     print(i)
 
-for num in range(5, 0, -1):
-    print('number:', num)  
+# for num in range(5, 0, -1):
+#     print('number:', num)
+
+# a = 1
+
+# if True:
+#     x = 1
+
+# def myfn():
+#     global a
+#     a = 2
+#     x = 2
+#     y = 2
+#     z = 2
+
+#     def myfn2():
+#         nonlocal z
+#         z = 3
+#     myfn2()
+#     return z
+
+# z = myfn()
+
+# print(a)    # 2
+# print(x)    # 1
+# # print(y)  # Error
+# print(z)    # 3
+
+# class MyObject:
+    
+#     classobj = 1
+
+#     def __init__(self, name):
+#         self.name = name
+#         MyObject.classobj = 2
+
+#     def mymethod(self, hello):
+#         print(f'{hello}, {self.name}!')
+
+#     @classmethod
+#     def staticmethod(cls, text):
+#         classobj = False
+#         return cls(text)
+
+
+# myobj = MyObject('abc')
+# myobj.mymethod('Hello')    # Hello, abc!
+
+# myobj = MyObject.staticmethod('cde')
+# myobj.mymethod('Hello')    # Hello, cde!
+
+class SuperClass:
+    def mymethod(self):
+        pass
+
+class SubClass(SuperClass):
+    def mymethod2(self):
+        SuperClass.mymethod()
+
+sub = SubClass()
+sub.mymethod()
