@@ -114,13 +114,75 @@
 # myobj = MyObject.staticmethod('cde')
 # myobj.mymethod('Hello')    # Hello, cde!
 
-class SuperClass:
-    def mymethod(self):
-        pass
+# class SuperClass:
+#     def __init__(self, name):
+#         self.name = name
 
-class SubClass(SuperClass):
-    def mymethod2(self):
-        SuperClass.mymethod()
+#     def mymethod1(self):
+#         print('super', self.name)
 
-sub = SubClass()
-sub.mymethod()
+# class SubClass(SuperClass):
+#     def __init__(self, name):
+#         super().__init__(name)
+#         # SuperClass.__init__(self, name)
+
+#     def mymethod2(self):
+#         print('sub', self.name)
+#         super().mymethod1()
+#         # SuperClass.mymethod1(self)
+
+# sub = SubClass('my')
+# sub.mymethod1() # super my
+# sub.mymethod2() # sub my super my
+
+# isinstance(sub, SubClass)   # true
+# isinstance(sub, SuperClass) # true
+# isinstance(sub, object)     # true
+
+# class MyClass:
+#     def __getitem__(self, i):
+#         return f'{i}. item'
+
+# my = MyClass()
+# print(my['x'])     # `1. item'
+
+# class Super1:
+#     def __init__(self, name, s1):
+#         self.name = name
+#         self.s1 = s1
+#     def method1(self):
+#         print(self.name, self.s1)
+
+# class Super2:
+#     def __init__(self, name, s2):
+#         self.name = name
+#         self.s2 = s2
+#     def method2(self):
+#         print(self.name, self.s2)
+
+# class Sub(Super1, Super2):
+#     def __init__(self, name, s1, s2):
+#         Super1.__init__(self, name, s1)
+#         Super2.__init__(self, name, s2)
+
+# sub = Sub('my','o1','o2')
+# sub.method1()   # my o1
+# sub.method2()   # my o2
+
+class X:
+    name = 'x'
+
+class A:
+    name = 'a'
+
+class B(A):
+    pass
+
+class C(A):
+    pass
+
+class D(C, B, X):
+    pass
+
+print(D.mro()) # D, B, C, A, object
+print(D.name)   # 10
