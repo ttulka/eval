@@ -169,20 +169,150 @@
 # sub.method1()   # my o1
 # sub.method2()   # my o2
 
-class X:
-    name = 'x'
+# class X:
+#     name = 'x'
 
-class A:
-    name = 'a'
+# class A:
+#     name = 'a'
 
-class B(A):
-    pass
+# class B(A):
+#     pass
 
-class C(A):
-    pass
+# class C(A):
+#     pass
 
-class D(C, B, X):
-    pass
+# class D(C, B, X):
+#     pass
 
-print(D.mro()) # D, B, C, A, object
-print(D.name)   # 10
+# print(D.mro()) # D, B, C, A, object
+# print(D.name)   # 10
+
+# def multiply_10(item):
+#     return item * 10
+
+# def is_odd(num):
+#     return num % 2 != 0  
+
+# li = [1, 2, 3]
+# li2 = list(
+#     map(multiply_10, 
+#         filter(is_odd, li)))
+ 
+# print(li2)  # [10, 30]
+
+# zi1 = list(zip(li, li2))
+# zi2 = list(zip(li2, li))
+
+# print(zi1)  # [(1, 10), (2, 30)]
+# print(zi2)  # [(10, 1), (30, 2)]
+
+# def sum(a, c):
+#     return a + c
+
+# from functools import reduce
+
+# r = reduce(lambda a, c: a + c, [1,2,3], 0)
+
+# print(r)   # 6
+
+# print(li)   # [1, 2, 3]
+
+# print(list(map(lambda i: i * 2, [1,2,3])))
+
+# a = [(0,2), (4,3), (2,1)]
+
+# sorting by the second key
+# a.sort(key=lambda x: x[1])
+
+# print(a)    # [(2, 1), (0, 2), (4, 3)]
+
+
+# li = [1, 1, 2, 3, 4, 3]
+
+# duplicates = list({x for x in li if li.count(x) > 1})
+# print(duplicates)
+
+# def my_decorater(func):
+#     # def wrap_func():
+#         print('start')
+#         func()
+#         print('end')
+#     # return wrap_func
+
+# @my_decorater
+# def hello():
+#     print('hello')
+
+# # hello()
+
+# def my_param_decorater(func):
+#     def wrap_func(*args, **kwargs):
+#         func(*args, **kwargs)
+#     return wrap_func
+
+# @my_param_decorater
+# def hello(name):
+#     print(f'hello, {name}!')
+
+# hello('abc')
+
+# from time import time
+# def performance(fn):
+#     def wrap(*args, **kwargs):
+#         t1 = time()
+#         res = fn(*args, **kwargs)
+#         t2 = time()
+#         print(f'took {t2-t1} ms')
+#         return res
+#     return wrap
+
+# @performance
+# def do_something():
+#     print('working...')
+
+# do_something()
+
+# try:
+#     raise Exception('boom')
+# except (ValueError, IndexError) as e:
+#     print(f'Error occured: {e}')
+# except TypeError:
+#     print('Type error occured')
+# except:
+#     print('Error occured')
+# else:
+#     print('Everything fine')
+# finally:
+#     print('Done')
+
+# def my_generator(n):
+#     for i in range(n):
+#         yield i
+
+# for i in my_generator(100):
+#     print(i)    # 0 - 99
+
+# g = my_generator(100)
+# print(next(g))  # 0
+# print(next(g))  # 1
+
+# x = 1
+# y = 2
+
+# x,y = y,x
+# print(x, y) # 2 1
+
+def fibonacci_generator(n):
+    prev = 0
+    next = 1
+    for _ in range(n+1):
+        yield prev
+        prev, next = next, prev+next
+
+i = 0
+for f in fibonacci_generator(10000):
+    if str(f).__contains__('06660'):
+        print(f'devil found: {i}#{f}')
+        break
+    i += 1
+    
