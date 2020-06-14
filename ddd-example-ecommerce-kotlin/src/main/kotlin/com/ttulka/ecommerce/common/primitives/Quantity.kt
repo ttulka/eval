@@ -1,13 +1,8 @@
 package com.ttulka.ecommerce.common.primitives
 
-import lombok.EqualsAndHashCode
-import lombok.ToString
-
 /**
  * Quantity domain primitive.
  */
-@EqualsAndHashCode
-@ToString
 class Quantity(quantity: Int) {
 
     companion object {
@@ -24,5 +19,16 @@ class Quantity(quantity: Int) {
 
     fun value(): Int = quantity
 
-    fun add(addend: Quantity) = Quantity(quantity + addend.value())
+    operator fun plus(addend: Quantity) = Quantity(quantity + addend.value())
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Quantity
+        return quantity == other.quantity
+    }
+
+    override fun hashCode() = quantity.hashCode()
+
+    override fun toString() = "Quantity(quantity=$quantity)"
 }
