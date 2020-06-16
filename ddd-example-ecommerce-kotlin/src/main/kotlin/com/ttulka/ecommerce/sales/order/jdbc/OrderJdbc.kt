@@ -8,7 +8,6 @@ import com.ttulka.ecommerce.sales.order.OrderPlaced
 import com.ttulka.ecommerce.sales.order.PlaceableOrder
 import com.ttulka.ecommerce.sales.order.PlaceableOrder.OrderAlreadyPlacedException
 import com.ttulka.ecommerce.sales.order.item.OrderItem
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.JdbcTemplate
 import java.time.Instant
@@ -23,7 +22,7 @@ internal class OrderJdbc(
         private val jdbcTemplate: JdbcTemplate,
         private val eventPublisher: EventPublisher) : PlaceableOrder {
 
-    private val log: Logger = LoggerFactory.getLogger(OrderJdbc::class.java)
+    private val log = LoggerFactory.getLogger(OrderJdbc::class.java)
 
     private var placed = false
 

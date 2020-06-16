@@ -7,7 +7,6 @@ import com.ttulka.ecommerce.billing.payment.PaymentId
 import com.ttulka.ecommerce.billing.payment.ReferenceId
 import com.ttulka.ecommerce.common.events.EventPublisher
 import com.ttulka.ecommerce.common.primitives.Money
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.JdbcTemplate
 import java.time.Instant
@@ -28,7 +27,7 @@ internal class PaymentJdbc(
         NEW, REQUESTED, COLLECTED
     }
 
-    private val log: Logger = LoggerFactory.getLogger(PaymentJdbc::class.java)
+    private val log = LoggerFactory.getLogger(PaymentJdbc::class.java)
 
     constructor(referenceId: ReferenceId, total: Money, jdbcTemplate: JdbcTemplate, eventPublisher: EventPublisher)
             : this(PaymentId(UUID.randomUUID()), referenceId, total, Status.NEW, jdbcTemplate, eventPublisher)
