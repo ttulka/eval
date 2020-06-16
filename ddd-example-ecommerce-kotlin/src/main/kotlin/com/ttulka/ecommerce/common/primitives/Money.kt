@@ -3,19 +3,17 @@ package com.ttulka.ecommerce.common.primitives
 /**
  * Money domain primitive.
  */
-class Money(money: Float) {
+class Money(private val money: Float) {
 
     companion object {
         val ZERO = Money(0f)
-        private const val MAX_VALUE = 1000000f
     }
 
-    private val money: Float
-
     init {
+        val maxValue = 1000000f
+
         require(money >= 0) { "Money cannot be less than zero." }
-        require(money <= MAX_VALUE) { "Money cannot be greater than $MAX_VALUE." }
-        this.money = money
+        require(money <= maxValue) { "Money cannot be greater than $maxValue." }
     }
 
     fun value(): Float = money
@@ -27,11 +25,10 @@ class Money(money: Float) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
-        other as Money
-        return money == other.money
+        return money == (other as Money).money
     }
 
     override fun hashCode() = money.hashCode()
 
-    override fun toString() = "Money(money=$money)"
+    override fun toString() = "Money($money)"
 }

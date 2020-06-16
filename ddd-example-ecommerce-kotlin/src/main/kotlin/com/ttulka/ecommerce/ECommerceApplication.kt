@@ -18,9 +18,9 @@ class ECommerceApplication {
 
     @Bean
     fun eventPublisher(applicationEventPublisher: ApplicationEventPublisher): EventPublisher =
-            object : EventPublisher {
-                override fun raise(event: DomainEvent) = applicationEventPublisher.publishEvent(event)
-            }
+        object : EventPublisher {
+            override fun raise(event: DomainEvent) = applicationEventPublisher.publishEvent(event)
+        }
 
     @Bean
     fun layoutDialect() = LayoutDialect()
