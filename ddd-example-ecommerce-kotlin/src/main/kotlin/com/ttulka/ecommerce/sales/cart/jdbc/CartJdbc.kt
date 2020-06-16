@@ -26,46 +26,43 @@ internal class CartJdbc(
                 WHERE cart_id = ?""", id.value())
             .map(::toCartItem)
 
-    private fun toCartItem(entry: Map<String, Any>): CartItem {
-        return CartItem(
-                ProductId(entry["product_id"]!!),
-                Title(entry["title"] as String),
-                Money((entry["price"] as BigDecimal).toFloat()),
-                Quantity(entry["quantity"] as Int))
-    }
+    private fun toCartItem(entry: Map<String, Any>): CartItem =
+        CartItem(
+            ProductId(entry["product_id"]!!),
+            Title(entry["title"] as String),
+            Money((entry["price"] as BigDecimal).toFloat()),
+            Quantity(entry["quantity"] as Int))
 
-    override fun hasItems(): Boolean {
-        return jdbcTemplate.queryForObject(
-                "SELECT COUNT(cart_id) FROM cart_items WHERE cart_id = ?",
-                Int::class.java, id.value()) > 0
-    }
+    override fun hasItems(): Boolean =
+        jdbcTemplate.queryForObject(
+            "SELECT COUNT(cart_id) FROM cart_items WHERE cart_id = ?",
+            Int::class.java, id.value()) > 0
 
     override fun add(toAdd: CartItem) {
         if (hasItem(toAdd)) {
             jdbcTemplate.update(
-                    """UPDATE cart_items SET quantity = quantity + ?
-                            WHERE cart_id = ? AND product_id = ? AND title = ? AND price = ?""",
-                    toAdd.quantity().value(), id.value(),
-                    toAdd.productId().value(), toAdd.title().value(), toAdd.unitPrice().value())
+                """UPDATE cart_items SET quantity = quantity + ?
+                        WHERE cart_id = ? AND product_id = ? AND title = ? AND price = ?""",
+                toAdd.quantity().value(), id.value(),
+                toAdd.productId().value(), toAdd.title().value(), toAdd.unitPrice().value())
         } else {
             jdbcTemplate.update(
-                    "INSERT INTO cart_items VALUES (?, ?, ?, ?, ?)",
-                    toAdd.productId().value(), toAdd.title().value(), toAdd.unitPrice().value(),
-                    toAdd.quantity().value(), id.value())
+                "INSERT INTO cart_items VALUES (?, ?, ?, ?, ?)",
+                toAdd.productId().value(), toAdd.title().value(), toAdd.unitPrice().value(),
+                toAdd.quantity().value(), id.value())
         }
     }
 
-    private fun hasItem(item: CartItem): Boolean {
-        return jdbcTemplate.queryForObject(
-                """SELECT COUNT(product_id) FROM cart_items 
-                        WHERE product_id = ? AND title = ? AND price = ?""", Int::class.java,
-                item.productId().value(), item.title().value(), item.unitPrice().value()) > 0
-    }
+    private fun hasItem(item: CartItem): Boolean =
+        jdbcTemplate.queryForObject(
+            """SELECT COUNT(product_id) FROM cart_items 
+                WHERE product_id = ? AND title = ? AND price = ?""", Int::class.java,
+            item.productId().value(), item.title().value(), item.unitPrice().value()) > 0
 
     override fun remove(productId: ProductId) {
         jdbcTemplate.update(
-                "DELETE FROM cart_items WHERE product_id = ? AND cart_id = ?",
-                productId.value(), id.value())
+            "DELETE FROM cart_items WHERE product_id = ? AND cart_id = ?",
+            productId.value(), id.value())
     }
 
     override fun empty() {

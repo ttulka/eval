@@ -16,15 +16,14 @@ internal class CategoriesJdbc(
 
     private fun categoriesFromDb(): Iterable<Category> =
         jdbcTemplate.queryForList("$query ORDER BY 1", *queryParams)
-                .map(::toCategory)
+            .map(::toCategory)
 
-    private fun toCategory(entry: Map<String, Any>): Category {
-        return CategoryJdbc(
-                CategoryId(entry["id"]!!),
-                Uri(entry["uri"] as String),
-                Title(entry["title"] as String),
-                jdbcTemplate)
-    }
+    private fun toCategory(entry: Map<String, Any>): Category =
+        CategoryJdbc(
+            CategoryId(entry["id"]!!),
+            Uri(entry["uri"] as String),
+            Title(entry["title"] as String),
+            jdbcTemplate)
 
     override fun iterator(): Iterator<Category> = categoriesFromDb().iterator()
 }

@@ -33,9 +33,7 @@ internal class ProductsJdbc(
         return this
     }
 
-    override fun range(limit: Int): Products {
-        return range(0, limit)
-    }
+    override fun range(limit: Int): Products = range(0, limit)
 
     private fun productsFromDb(): Iterable<Product> {
         val params = queryParams.toMutableList()
@@ -45,14 +43,13 @@ internal class ProductsJdbc(
                 .map(::toProduct)
     }
 
-    private fun toProduct(entry: Map<String, Any>): Product {
-        return ProductJdbc(
-                ProductId(entry["id"]!!),
-                Title(entry["title"] as String),
-                Description(entry["description"] as String),
-                Money((entry["price"] as BigDecimal).toFloat()),
-                jdbcTemplate)
-    }
+    private fun toProduct(entry: Map<String, Any>): Product =
+        ProductJdbc(
+            ProductId(entry["id"]!!),
+            Title(entry["title"] as String),
+            Description(entry["description"] as String),
+            Money((entry["price"] as BigDecimal).toFloat()),
+            jdbcTemplate)
 
     override fun iterator(): Iterator<Product> = productsFromDb().iterator()
 }
