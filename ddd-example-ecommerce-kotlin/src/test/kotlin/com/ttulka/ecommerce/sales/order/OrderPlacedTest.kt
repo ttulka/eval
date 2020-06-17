@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import java.time.Instant
-import java.util.Map
 
 class OrderPlacedTest {
 
@@ -29,6 +28,6 @@ class OrderPlacedTest {
         return OrderPlaced(
                 Instant.now(),
                 "TEST123",
-                Map.of("test-1", 1, "test-2", 2), 5f)
+                mapOf("test-1" to 1, "test-2" to 2), 5f)
     }
 }

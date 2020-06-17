@@ -10,8 +10,8 @@ import com.ttulka.ecommerce.sales.order.PlaceOrder
 import com.ttulka.ecommerce.sales.order.item.OrderItem
 import com.ttulka.ecommerce.sales.order.item.ProductId
 import com.ttulka.ecommerce.sales.order.jdbc.config.OrderJdbcConfig
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.offset
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -20,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
-import java.util.List
 
 @JdbcTest
 @ContextConfiguration(classes = [OrderJdbcConfig::class, PlaceOrderTest.TestConfig::class])
@@ -35,7 +34,7 @@ class PlaceOrderTest(
 
     @Test
     fun order_placed_raises_an_event() {
-        placeOrder.place(OrderId("TEST123"), List.of(
+        placeOrder.place(OrderId("TEST123"), listOf(
                 OrderItem(ProductId("test-1"), Quantity(123))),
                 Money(12.34f * 123))
 
@@ -45,7 +44,7 @@ class PlaceOrderTest(
                 { assertThat((eventPublisher.sent.first() as OrderPlaced).orderId).isEqualTo("TEST123") },
                 { assertThat((eventPublisher.sent.first() as OrderPlaced).items).hasSize(1) },
                 { assertThat((eventPublisher.sent.first() as OrderPlaced).items["test-1"]).isEqualTo(123) },
-                { assertThat((eventPublisher.sent.first() as OrderPlaced).total).isCloseTo(12.34f * 123, Assertions.offset(0.01f)) }
+                { assertThat((eventPublisher.sent.first() as OrderPlaced).total).isCloseTo(12.34f * 123, offset(0.01f)) }
         )
     }
 
