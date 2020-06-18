@@ -13,5 +13,5 @@ interface PlaceableOrder : Order {
     /**
      * OrderAlreadyPlacedException is thrown when an already placed Order is placed.
      */
-    class OrderAlreadyPlacedException : IllegalStateException()
+    class OrderAlreadyPlacedException internal constructor() : IllegalStateException()
 }

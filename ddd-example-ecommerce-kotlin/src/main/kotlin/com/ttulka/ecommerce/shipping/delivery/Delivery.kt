@@ -23,7 +23,7 @@ interface Delivery {
 
     val isDispatched: Boolean
 
-    class DeliveryAlreadyPreparedException : IllegalStateException()
+    class DeliveryAlreadyPreparedException internal constructor() : IllegalStateException()
 
-    class DeliveryAlreadyDispatchedException : IllegalStateException()
+    class DeliveryAlreadyDispatchedException internal constructor() : IllegalStateException()
 }

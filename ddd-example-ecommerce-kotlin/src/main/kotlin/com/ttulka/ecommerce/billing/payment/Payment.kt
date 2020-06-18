@@ -31,15 +31,15 @@ interface Payment {
     /**
      * PaymentAlreadyRequestedException is thrown when an already requested Payment is requested.
      */
-    class PaymentAlreadyRequestedException : IllegalStateException()
+    class PaymentAlreadyRequestedException internal constructor() : IllegalStateException()
 
     /**
      * PaymentNotRequestedYetException is thrown when a Payment is collected but not requested yet.
      */
-    class PaymentNotRequestedYetException : IllegalStateException()
+    class PaymentNotRequestedYetException internal constructor() : IllegalStateException()
 
     /**
      * PaymentAlreadyCollectedException is thrown when an already collected Payment is collected.
      */
-    class PaymentAlreadyCollectedException : IllegalStateException()
+    class PaymentAlreadyCollectedException internal constructor() : IllegalStateException()
 }

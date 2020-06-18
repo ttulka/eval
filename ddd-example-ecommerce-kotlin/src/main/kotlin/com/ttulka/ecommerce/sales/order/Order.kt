@@ -17,5 +17,5 @@ interface Order {
     /**
      * OrderHasNoItemsException is thrown when the Order has no items.
      */
-    class OrderHasNoItemsException : IllegalStateException()
+    class OrderHasNoItemsException internal constructor(): IllegalStateException()
 }

@@ -22,7 +22,6 @@ internal class PaymentControllerTest(
     private lateinit var findPayments: FindPayments
 
     @Test
-    @Throws(Exception::class)
     fun all_payments() {
         Mockito.`when`(findPayments.all()).thenReturn(
                 testPayments(PaymentId("TEST123"), ReferenceId("TEST-REF1"), Money(123.5f)))
